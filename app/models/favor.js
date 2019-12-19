@@ -27,7 +27,7 @@ class Favor extends Model {
             throw new global.errs.LinkError();
         };
         //使用数据库 事务
-        sequelize.transaction(async t=>{
+        return sequelize.transaction(async t=>{
           await  Favor.create({
                 art_id,
                 type,
@@ -41,7 +41,29 @@ class Favor extends Model {
 
     }
     static async disLike(art_id,type,uid){
+        const favor=await Favor.findOne({
+            where:{
+                art_id,
+                type,
+                uid
+            }
+        });
+        if(!favor){
+            throw new global.errs.DislikeError();
+        };
+        //Favor 表   favor 表里的数据
+        //使用数据库 事务
+        return sequelize.transaction(async t=>{
+            //向里添加一条记录
+            await  favor.destroy({
+              force:true,  //false 软删除  true 物理删除
+                transaction:t
+            });
 
+            const art = await Art.getData(art_id,type);
+            //减一
+            await art.decrement('fav_nums',{by:1,transaction:t});
+        });
     }
 
 
