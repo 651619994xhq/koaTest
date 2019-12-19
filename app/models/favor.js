@@ -1,0 +1,63 @@
+// const {sequelize : db} = require('../../core/db');
+const bcrypt = require('bcryptjs');
+//模型
+const {sequelize} = require('../../core/db');
+
+const {Sequelize,Model} = require('sequelize');
+
+const {Art} = require('./art');
+
+
+//业务表 点赞 取消
+class Favor extends Model {
+    static async like(art_id,type,uid){
+        //1.favor 表 添加记录
+        //2.classic fav_nums
+        //可能会操作 多个表 如果保持数据库 一致性 要用事务 不加事务不一定能保证数据的一致性
+        //数据库 事务 可以帮助 可以保持数据的一致性
+        //关系型数据ACID 1。原子性，2。一致性，3。隔离性 4。持久性
+        const favor=await Favor.findOne({
+            where:{
+                art_id,
+                type,
+                uid
+            }
+        });
+        if(favor){
+            throw new global.errs.LinkError();
+        };
+        //使用数据库 事务
+        sequelize.transaction(async t=>{
+          await  Favor.create({
+                art_id,
+                type,
+                uid
+            },{transaction:t});
+
+         const art = await Art.getData(art_id,type);
+         await art.increment('fav_nums',{by:1,transaction:t});
+        });
+
+
+    }
+    static async disLike(art_id,type,uid){
+
+    }
+
+
+}
+
+Favor.init({
+ uid:Sequelize.INTEGER,
+ art_id:Sequelize.INTEGER,
+ type:Sequelize.INTEGER,
+
+},{
+    sequelize,
+    tableName:'favor'   //指定表的名字
+});
+
+module.exports = {
+    Favor
+}
+// 数据迁移 SQL 更新 有风险
