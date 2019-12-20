@@ -2,13 +2,14 @@ const Router = require('koa-router');
 const router = new Router({
     prefix:'/v1/classic'
 });
-const {Flow} =require('../../models/flow');
-const {Art} =require('../../models/art');
+const {Flow} =require('@models/flow');
+const {Art} =require('@models/art');
+const {Favor} = require('@models/favor');
 
-const {Auth} = require('../../../middlewares/auth')
+const {Auth} = require('@middlewares/auth')
 
 // router.post('/latest',new Auth().m,async (ctx,next)=>{
-router.post('/latest',async (ctx,next)=>{
+router.post('/latest',new Auth().m,async (ctx,next)=>{
     //index max
     //排序1，2，3，4，5，6...max
     const flow =await Flow.findOne({
@@ -19,8 +20,12 @@ router.post('/latest',async (ctx,next)=>{
     });
 
     const art=await Art.getData(flow.art_id,flow.type);
+
+    const likeLatest = await Favor.userLikeIt(flow.art_id,flow.type,ctx.auth.uid);
+
     // art.dataValues.index = flow.index; //可以用这个 js 动态 不严谨
     art.setDataValue('index',flow.index);
+    art.setDataValue('like_status',likeLatest);
     ctx.body=art;
     //koa
     //序列化 对象 json

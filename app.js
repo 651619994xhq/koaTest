@@ -1,3 +1,5 @@
+require('module-alias/register'); //引入别名的包
+
 const Koa = require('koa');
 const parser = require('koa-bodyparser');//中间件 主要是获取客户端请求的body 参数
 // const requireDirectory=require('require-directory');

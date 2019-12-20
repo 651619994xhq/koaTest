@@ -21,6 +21,7 @@
     "koa-static": "^5.0.0",
     "lin-mizar": "^0.2.3",
     "lodash": "^4.17.15",
+    "module-alias": "^2.2.2",
     "mysql2": "^2.0.2",
     "require-directory": "^2.1.1",
     "sequelize": "^5.21.3",
@@ -29,5 +30,10 @@
   "devDependencies": {
     "nodemon": "^2.0.1",
     "supervisor": "^0.12.0"
+  },
+  "_moduleAliases": {
+    "@root": ".",
+    "@models": "app/models",
+    "@middlewares": "middlewares"
   }
 }

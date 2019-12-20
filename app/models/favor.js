@@ -10,6 +10,13 @@ const {Art} = require('./art');
 
 //业务表 点赞 取消
 class Favor extends Model {
+    /**
+     * 增加数据
+     * @param art_id
+     * @param type
+     * @param uid
+     * @returns {Promise<Promise<any>>}
+     */
     static async like(art_id,type,uid){
         //1.favor 表 添加记录
         //2.classic fav_nums
@@ -40,6 +47,14 @@ class Favor extends Model {
 
 
     }
+
+    /**
+     * 从数据库中删除 数据 使用数据库事务
+     * @param art_id
+     * @param type
+     * @param uid
+     * @returns {Promise<Promise<any>>}
+     */
     static async disLike(art_id,type,uid){
         const favor=await Favor.findOne({
             where:{
@@ -64,6 +79,24 @@ class Favor extends Model {
             //减一
             await art.decrement('fav_nums',{by:1,transaction:t});
         });
+    }
+
+    /**
+     * 用户是否点过赞
+     * @param art_id
+     * @param type
+     * @param uid
+     * @returns {Promise<boolean>}
+     */
+    static async userLikeIt(art_id,type,uid){
+         const favor=await Favor.findOne({
+             where:{
+                 uid,
+                 art_id,
+                 type
+             }
+         });
+         return favor?true:false
     }
 
 
