@@ -21,6 +21,13 @@ const  sequelize = new Sequelize(dbName,user,password,{
        // deletedAt:'deleted_time',
        // updatedAt:'updated_time',
        underscored:true, //把所有的 驼峰转换成 下滑线
+       scopes:{  //也可以写在单个model上，写在这里 就是搞成全局
+           bh:{
+               attributes:{
+                   exclude:['created_at','deleted_at','updated_at']  //排除这3个字段
+               }
+           }
+       }
     },
 });
 
@@ -32,3 +39,6 @@ module.exports ={
 }
 
 //开始创建模型了
+
+
+//数据库 scope 是个很好的东西 可以排除很多数据
