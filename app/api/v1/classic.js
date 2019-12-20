@@ -6,7 +6,9 @@ const {Flow} =require('@models/flow');
 const {Art} =require('@models/art');
 const {Favor} = require('@models/favor');
 
-const {Auth} = require('@middlewares/auth')
+const {Auth} = require('@middlewares/auth');
+
+const {PositiveIntegerValidator} = require('@validators/validators');
 
 // router.post('/latest',new Auth().m,async (ctx,next)=>{
 router.post('/latest',new Auth().m,async (ctx,next)=>{
@@ -32,6 +34,60 @@ router.post('/latest',new Auth().m,async (ctx,next)=>{
     //js 序列化 JSON
     //Class
 });
+
+router.post('/:index/next',new Auth().m,async (ctx,next)=>{
+    const v =await new PositiveIntegerValidator().validate(ctx,{
+        id:'index'
+    });
+    const index = v.get('path.index');
+    //如果只有一小段 不必要放在 model里 看个人
+    const flow =await Flow.findOne({
+        where:{
+            index:index+1
+        }
+    });
+    if(!flow){
+        throw global.errs.NotFound();
+    }
+
+    const art=await Art.getData(flow.art_id,flow.type);
+
+    const likeNext = await Favor.userLikeIt(flow.art_id,flow.type,ctx.auth.uid);
+
+    // art.dataValues.index = flow.index; //可以用这个 js 动态 不严谨
+    art.setDataValue('index',flow.index);
+    art.setDataValue('like_status',likeNext);
+    ctx.body=art;
+
+});
+
+
+router.post('/:index/previous',new Auth().m,async (ctx,next)=>{
+    const v =await new PositiveIntegerValidator().validate(ctx,{
+        id:'index'
+    });
+    const index = v.get('path.index');
+    //如果只有一小段 不必要放在 model里 看个人
+    const flow =await Flow.findOne({
+        where:{
+            index:index-1
+        }
+    });
+    if(!flow){
+        throw global.errs.NotFound();
+    }
+
+    const art=await Art.getData(flow.art_id,flow.type);
+
+    const likePrevious = await Favor.userLikeIt(flow.art_id,flow.type,ctx.auth.uid);
+
+    // art.dataValues.index = flow.index; //可以用这个 js 动态 不严谨
+    art.setDataValue('index',flow.index);
+    art.setDataValue('like_status',likePrevious);
+    ctx.body=art;
+
+});
+
 module.exports=router
 
 //权限 复杂
