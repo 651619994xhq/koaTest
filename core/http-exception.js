@@ -82,6 +82,8 @@ module.exports = {
     Success,
     NotFound,
     AuthFailed,
-    Forbbiden
+    Forbbiden,
+    LikeError,
+    DislikeError
 
 }

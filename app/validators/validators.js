@@ -100,7 +100,6 @@ class TokenValidator extends LinValidator{
 class NotEmptyValidator extends LinValidator{
     constructor(){
         super();
-        console.log('token==> is run')
         this.token = [
             new Rule('isLength','不允许为空',{min:1})
         ]
@@ -124,7 +123,6 @@ function checkType(vals) {
 class LikeValidator extends PositiveIntegerValidator{
     constructor(){
         super();
-        console.log('token==> is run')
         this.validateType = checkType;
 
     }

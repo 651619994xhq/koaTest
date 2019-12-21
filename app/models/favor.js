@@ -31,7 +31,7 @@ class Favor extends Model {
             }
         });
         if(favor){
-            throw new global.errs.LinkError();
+            throw new global.errs.LikeError();
         };
         //使用数据库 事务
         return sequelize.transaction(async t=>{

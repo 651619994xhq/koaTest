@@ -7,8 +7,8 @@ class Art {
             }
         };
         let art = null;
-        // const scope=useScope?'bh':null; //这个是兼容 sequelize 在使用scope 之后 在使用更新操作 会出现sql 语句报错的情况
-        let scope='bh'
+        const scope=useScope?'bh':null; //这个是兼容 sequelize 在使用scope 之后 在使用更新操作 会出现sql 语句报错的情况
+        // let scope='bh'
         switch (type) {
             case 100:
                 //这里 Sscope 是排除时间语句
