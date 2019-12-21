@@ -107,6 +107,18 @@ router.post('/favor',new Auth().m,async ctx=>{
 
 });
 
+/**
+ * 用户收藏列表
+ *
+ */
+router.post('/favorList',new Auth().m,async ctx=>{
+    const uid =ctx.auth.uid;
+    let list=await Favor.getMyClassicFavors(uid);
+    ctx.body={list}
+
+
+});
+
 module.exports=router
 
 //权限 复杂

@@ -20,3 +20,32 @@ function func3(){
 //异步编程下的
 
 
+class Test{
+    constructor(){
+        this.a=123;
+
+    }
+
+    efg(){
+        console.log('efg')
+    }
+
+    abc(){
+       console.log('abc');
+    }
+    static bcd(){
+        console.log(this.abc());
+
+    }
+
+
+}
+
+// console.log('1==>',Test.abc());
+// console.log('2==>',Test.abc());
+let test =new Test();
+console.log('2==>',test.a);
+// console.log('3==>',test.abc());
+console.log('3==>',Test.bcd());
+
+

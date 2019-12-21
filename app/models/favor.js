@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 //模型
 const {sequelize} = require('../../core/db');
 
-const {Sequelize,Model} = require('sequelize');
+const {Sequelize,Model,Op} = require('sequelize');
 
 const {Art} = require('./art');
 
@@ -97,6 +97,32 @@ class Favor extends Model {
              }
          });
          return favor?true:false
+    }
+
+    static async getMyClassicFavors(uid){
+        // type!=400
+        //查询列表
+        const arts = await Favor.findAll({
+            where:{
+                uid,
+                type:{
+                    //这个不是js 写法 这个是sequlize写法
+                    [Op.not]:400  //OP.not 表示操作符 不等于 400
+                }
+            }
+        })
+
+        if(!arts){
+            throw new global.errs.NotFound();
+        }
+
+        return await Art.getList(arts);
+
+        //arts 是数组
+        //如果for 循环 查询数据库 是很危险的行为 不可控
+        // in 查询 可以接受一个集合 [ids]
+
+
     }
 
 

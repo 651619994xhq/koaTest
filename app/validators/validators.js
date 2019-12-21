@@ -1,6 +1,6 @@
 const { LinValidator, Rule } = require('../../core/lin-validator-v2');
 const {User} = require('../models/user')
-const {LoginType} =require('../lib/enum');
+const {LoginType,ArtType} =require('../lib/enum');
 //正整数校验
 class PositiveIntegerValidator extends LinValidator{
       constructor(){
@@ -108,11 +108,38 @@ class NotEmptyValidator extends LinValidator{
 
 }
 
-function checkType(vals) {
-    if(!vals.body.type){
+
+//这里也可以 写成函数
+//类  可以保存 变量 函数 不可以保存变量
+class Checker{
+
+    constructor(type){
+        this.enumType= type;
+    }
+    //注意类上 静态方法 和动态方法的区别
+    //是一个实例方法
+    check(vals) {
+        let type =vals.body.type;
+        if(!type){
+            throw new Error('type是必传参数')
+        }
+        type=parseInt(type);
+        if(!this.enumType.isThisType(type)){
+            console.log('type==>',vals.body.type)
+            throw new Error('type参数不合法')
+        }
+
+    }
+
+}
+
+function checkArtType(vals){
+    let type =vals.body.type;
+    if(!type){
         throw new Error('type是必传参数')
     }
-    if(!LoginType.isThisType(vals.body.type)){
+    type=parseInt(type);
+    if(!ArtType.isThisType(type)){
         console.log('type==>',vals.body.type)
         throw new Error('type参数不合法')
     }
@@ -123,7 +150,9 @@ function checkType(vals) {
 class LikeValidator extends PositiveIntegerValidator{
     constructor(){
         super();
-        this.validateType = checkType;
+        this.validateType=checkArtType;
+        // const checker = new Checker(ArtType)
+        // this.validateType = checker.check.bind(checker);
 
     }
 
@@ -132,6 +161,7 @@ class LikeValidator extends PositiveIntegerValidator{
 class ClassicValidator extends LikeValidator{
 
 }
+
 
 
 
