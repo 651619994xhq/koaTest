@@ -8,7 +8,7 @@ const {Favor} = require('@models/favor');
 
 const {Auth} = require('@middlewares/auth');
 
-const {PositiveIntegerValidator} = require('@validators/validators');
+const {PositiveIntegerValidator,ClassicValidator} = require('@validators/validators');
 
 // router.post('/latest',new Auth().m,async (ctx,next)=>{
 router.post('/latest',new Auth().m,async (ctx,next)=>{
@@ -85,6 +85,25 @@ router.post('/:index/previous',new Auth().m,async (ctx,next)=>{
     art.setDataValue('index',flow.index);
     art.setDataValue('like_status',likePrevious);
     ctx.body=art;
+
+});
+
+/**
+ * @type
+ * @id
+ */
+router.post('/favor',new Auth().m,async ctx=>{
+    const v=await new ClassicValidator().validate(ctx);
+    const id=v.get('body.id'),type=v.get('body.type');
+    const art =await Art.getData(id, type);
+    if(!art){
+        throw new global.errs.NotFound();
+    }
+    const like = await Favor.userLikeIt(id,type,ctx.auth.uid);
+    ctx.body={
+        fav_nums: art.fav_nums,
+        like_status:like
+    }
 
 });
 

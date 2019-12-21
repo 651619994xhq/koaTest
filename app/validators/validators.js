@@ -129,6 +129,10 @@ class LikeValidator extends PositiveIntegerValidator{
 
 }
 
+class ClassicValidator extends LikeValidator{
+
+}
+
 
 
 
@@ -137,5 +141,6 @@ module.exports={
     RegisterValidator,
     TokenValidator,
     NotEmptyValidator,
-    LikeValidator
+    LikeValidator,
+    ClassicValidator
 }

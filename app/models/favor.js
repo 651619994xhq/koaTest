@@ -71,7 +71,7 @@ class Favor extends Model {
         return sequelize.transaction(async t=>{
             //向里添加一条记录
             await  favor.destroy({
-              force:true,  //false 软删除  true 物理删除
+                force:true,  //false 软删除  true 物理删除
                 transaction:t
             });
 
