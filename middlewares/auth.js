@@ -10,52 +10,104 @@ class Auth {
         Auth.SUPER_ADMIN = 32; //超级管理员
 
     }
+    // get m(){
+    //     return async (ctx,next)=>{
+    //         // koa  nodejs 封装后的一个产物
+    //         // nodejs request
+    //         // ctx.req  是 对 原生的nodejs request 包装后的
+    //         //token 检测
+    //         //token 开发者 传递令牌
+    //         //token body header 约定
+    //         //HTTP 协议 规定 身份验证机制 HttpBasicAuth
+    //         const userToken = basicAuth(ctx.req);
+    //
+    //         console.log(userToken)
+    //         let errMsg= 'token不合法'
+    //         // ctx.body=token;
+    //         if(!userToken || !userToken.name){
+    //               throw new global.errs.Forbbiden(errMsg);
+    //         };
+    //         try{
+    //             // console.log('name==>',userToken.name, '  secretKey==>',global.config.security.secretKey)
+    //          var decode = jwt.verify(userToken.name,global.config.security.secretKey)
+    //          // console.log('decode==>',decode);
+    //
+    //         }catch (error) {
+    //             //1.用户 token 不合法
+    //             //2. token 过期
+    //             if(error.name == 'TokenExpiredError'){
+    //                 errMsg='token已过期';
+    //             }
+    //             throw new global.errs.Forbbiden(errMsg)
+    //         }
+    //
+    //         if(decode.scope < this.level){
+    //             errMsg='权限不足';
+    //             throw new global.errs.Forbbiden(errMsg)
+    //         }
+    //
+    //         //放在上下文的 属性中
+    //         ctx.auth={
+    //             uid:decode.uid,
+    //             scope:decode.scope
+    //         }
+    //
+    //         await next();
+    //
+    //
+    //
+    //     }
+    //
+    // }
+
+    //这个是没有http协议的
     get m(){
-        return async (ctx,next)=>{
-            // koa  nodejs 封装后的一个产物
-            // nodejs request
-            // ctx.req  是 对 原生的nodejs request 包装后的
-            //token 检测
-            //token 开发者 传递令牌
-            //token body header 约定
-            //HTTP 协议 规定 身份验证机制 HttpBasicAuth
-            const userToken = basicAuth(ctx.req);
-            console.log(userToken)
-            let errMsg= 'token不合法'
-            // ctx.body=token;
-            if(!userToken || !userToken.name){
-                  throw new global.errs.Forbbiden(errMsg);
-            };
-            try{
-                // console.log('name==>',userToken.name, '  secretKey==>',global.config.security.secretKey)
-             var decode = jwt.verify(userToken.name,global.config.security.secretKey)
-             // console.log('decode==>',decode);
+            return async (ctx,next)=>{
+                // koa  nodejs 封装后的一个产物
+                // nodejs request
+                // ctx.req  是 对 原生的nodejs request 包装后的
+                //token 检测
+                //token 开发者 传递令牌
+                //token body header 约定
+                //HTTP 协议 规定 身份验证机制 HttpBasicAuth
+                const userToken = ctx.request.header.token;
 
-            }catch (error) {
-                //1.用户 token 不合法
-                //2. token 过期
-                if(error.name == 'TokenExpiredError'){
-                    errMsg='token已过期';
+                console.log(userToken)
+                let errMsg= 'token不合法'
+                // ctx.body=token;
+                if(!userToken){
+                    errMsg='未登录'
+                      throw new global.errs.Forbbiden(errMsg);
+                };
+                try{
+                    // console.log('name==>',userToken.name, '  secretKey==>',global.config.security.secretKey)
+                 var decode = jwt.verify(userToken,global.config.security.secretKey)
+                 // console.log('decode==>',decode);
+
+                }catch (error) {
+                    //1.用户 token 不合法
+                    //2. token 过期
+                    if(error.name == 'TokenExpiredError'){
+                        errMsg='token已过期';
+                    }
+                    throw new global.errs.Forbbiden(errMsg)
                 }
-                throw new global.errs.Forbbiden(errMsg)
+                if(decode.scope < this.level){
+                    errMsg='权限不足';
+                    throw new global.errs.Forbbiden(errMsg)
+                }
+
+                //放在上下文的 属性中
+                ctx.auth={
+                    uid:decode.uid,
+                    scope:decode.scope
+                }
+
+                await next();
+
+
+
             }
-
-            if(decode.scope < this.level){
-                errMsg='权限不足';
-                throw new global.errs.Forbbiden(errMsg)
-            }
-
-            //放在上下文的 属性中
-            ctx.auth={
-                uid:decode.uid,
-                scope:decode.scope
-            }
-
-            await next();
-
-
-
-        }
 
     }
 

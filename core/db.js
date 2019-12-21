@@ -24,7 +24,7 @@ const  sequelize = new Sequelize(dbName,user,password,{
        scopes:{  //也可以写在单个model上，写在这里 就是搞成全局
            bh:{
                attributes:{
-                   exclude:['created_at','deleted_at','updated_at']  //排除这3个字段
+                   exclude:['created_at','deleted_at','updated_at','createdAt','deletedAt','updatedAt']  //排除这3个字段
                }
            }
        }

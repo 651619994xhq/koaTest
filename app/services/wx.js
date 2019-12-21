@@ -15,14 +15,16 @@ class WXManager{
         //url
 
         const url= util.format(global.config.wx.loginUrl,global.config.wx.appId,global.config.wx.appSecret,code);
-
+        // console.log('url==>',url);
         const result = await axios.get(url);
+        // console.log('result==>',result.data,'status==>',result.status,'errcode==>',result)
         if(result.status!==200){
             throw new global.errs.AuthFailed('openid获取失败');
         };
         const errcode=result.data.errcode
-        //微信的错误码
-        if(errcode != 0){
+        //微信的错误码没有返回 只能通过openid 判断了
+        // if(errcode != 0){
+        if(!result.data.openid){
             throw new global.errs.AuthFailed('openid获取失败:'+ errcode);
         }
         //openid
