@@ -100,6 +100,7 @@ router.post('/favor',new Auth().m,async ctx=>{
         throw new global.errs.NotFound();
     }
     const like = await Favor.userLikeIt(id,type,ctx.auth.uid);
+
     ctx.body={
         fav_nums: art.fav_nums,
         like_status:like
@@ -108,14 +109,32 @@ router.post('/favor',new Auth().m,async ctx=>{
 });
 
 /**
- * 用户收藏列表
+ *
  *
  */
-router.post('/favorList',new Auth().m,async ctx=>{
+router.post('/favorList/',new Auth().m,async ctx=>{
     const uid =ctx.auth.uid;
     let list=await Favor.getMyClassicFavors(uid);
     ctx.body={list}
 
+
+});
+
+/**
+ * 点赞详情
+ */
+router.post('/favor/detail',new Auth().m,async ctx=>{
+    const v=await new ClassicValidator().validate(ctx);
+    const id=v.get('body.id'),type=v.get('body.type');
+    // const art =await Art.getData(id, type);
+    // if(!art){
+    //     throw new global.errs.NotFound();
+    // }
+    // const like = await Favor.userLikeIt(id,type,ctx.auth.uid);
+    // art.setDataValue('like_status',like);
+    const artDetail =await new Art(id,type).getDetail(ctx.auth.uid); //在这里运行实例方法
+    artDetail.art.setDataValue('like_status',artDetail.like_status)
+    ctx.body=artDetail.art;
 
 });
 

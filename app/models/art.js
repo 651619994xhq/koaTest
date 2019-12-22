@@ -1,7 +1,31 @@
-const {Movie,Music,Sentence} =require('../models/classic')
 const {Op} = require('sequelize');
 const {flatten} =require('lodash');
+const {Movie,Music,Sentence} =require('./classic')
+// const {Favor} =require('./favor');  //避免循环引入，可以写在函数内部导入
 class Art {
+    //决定一个对象的特征的参数 可以在构造函数内传入，其他灵活参数可以在 方法中传入
+    constructor(art_id,type){
+        this.art_id=art_id;
+        this.type=type
+    }
+    // getDetail(){
+    //
+    // }
+    //用get 关键字 获取属性 的 detail 是一个属性 不能传参
+    async getDetail(uid){
+        const {Favor} =require('./favor');
+        const art =await Art.getData(this.art_id, this.type);
+        if(!art){
+            throw new global.errs.NotFound();
+        }
+        const like = await Favor.userLikeIt(this.art_id,this.type,uid);
+        return {
+            art,
+            like_status: like
+        }
+    }
+
+    //可以改成实例方法
     static async getData(art_id, type,useScope=true) {
         const finder = {
             where: {
@@ -34,6 +58,7 @@ class Art {
 
     }
 
+    //处理集合 可以单独 在宁一个 集合类artCollection
     static async getList(artInfoList){
         // in 查询 【ids】
         //3种类型 art
@@ -102,3 +127,8 @@ class Art {
 module.exports={
     Art
 }
+
+//面向对象编程
+//如果一个类下没有实例方法全是 static 静态方法 一个类也就没有了意义 只是 一个方法的集合
+//静态方法不太具有复用性 但是实例方法确是有
+//如果一个类中有很多方法 如果用static 方法 则需要传递很多参数  但是实例方法不一样 constructor 构造函数 传递一些特征性参数 在实例中 直接进行运用
