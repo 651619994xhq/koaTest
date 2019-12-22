@@ -1,9 +1,12 @@
 const Router = require('koa-router');
-const router = new Router();
+const router = new Router({
+    prefix:'/v1/book'
+});
 const {HttpException,ParameterException} = require('../../../core/http-exception');
 const {PositiveIntegerValidator} =require('../../validators/validators');
 const {Auth} =require('@middlewares/auth');
 const {HotBook} =require('@models/hot-book');
+const {Book} =require('@models/book');
 //传参方式 1.在路径中传参/v1/${param}/book/latest 2.在path /v1/book/latest?param=...
           //3.在header
           //4.body 只有在post 才能获取到
@@ -52,9 +55,18 @@ const {HotBook} =require('@models/hot-book');
 
 //book 数据库表
 //业务 图书业务数据
-router.post('/v1/book/hot_list',new Auth().m,async ctx=>{
+router.post('/hot_list',new Auth().m,async ctx=>{
     let books=await HotBook.getAll()
     ctx.body=books;
+
+});
+
+router.post('/detail',new Auth().m,async ctx=>{
+    const v=await new PositiveIntegerValidator().validate(ctx);
+    // let books=await HotBook.getAll()
+    // ctx.body=books;
+    const book = new Book(v.get('body.id'))
+    ctx.body=await book.detail();
 
 });
 module.exports=router

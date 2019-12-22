@@ -15,7 +15,10 @@ const classicFields = {
     image: Sequelize.STRING,
     content: Sequelize.STRING,
     pubdate: Sequelize.DATEONLY,
-    fav_nums: Sequelize.STRING,
+    fav_nums: {
+        type:Sequelize.INTEGER,
+        default:0
+    },
     type: Sequelize.TINYINT,
     title: Sequelize.STRING,
 

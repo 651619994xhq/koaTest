@@ -33,7 +33,8 @@ class HotBook extends Model {
         const favors =await  Favor.findAll({
             where:{
                art_id:{
-                   [Op.in]:ids
+                   [Op.in]:ids,
+                   type:400
                }
             },
             group:['art_id'],     //分组
