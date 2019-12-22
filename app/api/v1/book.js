@@ -2,42 +2,60 @@ const Router = require('koa-router');
 const router = new Router();
 const {HttpException,ParameterException} = require('../../../core/http-exception');
 const {PositiveIntegerValidator} =require('../../validators/validators');
+const {Auth} =require('@middlewares/auth');
+const {HotBook} =require('@models/hot-book');
 //传参方式 1.在路径中传参/v1/${param}/book/latest 2.在path /v1/book/latest?param=...
           //3.在header
           //4.body 只有在post 才能获取到
-router.post('/v1/:id/book/latest',(ctx,next)=>{
-    const path=ctx.params;
-    const query= ctx.request.query;
-    const header=ctx.request.header;
-    const body=ctx.request.body;
+// router.post('/v1/:id/book/latest',(ctx,next)=>{
+//     const path=ctx.params;
+//     const query= ctx.request.query;
+//     const header=ctx.request.header;
+//     const body=ctx.request.body;
+//
+//     //LinValidator;
+//     const v = new PositiveIntegerValidator().validate(ctx);  //校验器
+//     const id=v.get('path.id',parsed=false);
+//     const v_id=v.get('body.d.e.c',parsed=false); //不会报错
+//     console.log('id==>',id)
+//
+//     // if(true){
+//     //     //动态 面向对象
+//     //   // const error = new Error('为什么错误')
+//     //   //       error.errorCode = 10001;
+//     //   //       error.status = 400;
+//     //   //       error.requestUrl =  `${ctx.method} ${ctx.path}`;
+//     //   //       throw error;
+//     //   //   const error = new ParameterException();
+//     //     // error.requestUrl = `${ctx.method} ${ctx.path}`;
+//     //     const error = new global.errs.ParameterException();
+//     //     throw error;
+//     //
+//     // }
+//
+//
+//     ctx.body={
+//         key:'book'
+//     }
+//     // KOA 中间件 1.全局监听异常 2.输出一段有意义的信息
+//
+//     //异常处理，异常处理的应用
+// });
 
-    //LinValidator;
-    const v = new PositiveIntegerValidator().validate(ctx);  //校验器
-    const id=v.get('path.id',parsed=false);
-    const v_id=v.get('body.d.e.c',parsed=false); //不会报错
-    console.log('id==>',id)
 
-    // if(true){
-    //     //动态 面向对象
-    //   // const error = new Error('为什么错误')
-    //   //       error.errorCode = 10001;
-    //   //       error.status = 400;
-    //   //       error.requestUrl =  `${ctx.method} ${ctx.path}`;
-    //   //       throw error;
-    //   //   const error = new ParameterException();
-    //     // error.requestUrl = `${ctx.method} ${ctx.path}`;
-    //     const error = new global.errs.ParameterException();
-    //     throw error;
-    //
-    // }
+//图书基础数据 服务的形式
+//API/项目
+//公用型 API 公开
 
+//nodejs 中间层
+//微服务
 
-    ctx.body={
-        key:'book'
-    }
-    // KOA 中间件 1.全局监听异常 2.输出一段有意义的信息
+//book 数据库表
+//业务 图书业务数据
+router.post('/v1/book/hot_list',new Auth().m,async ctx=>{
+    let books=await HotBook.getAll()
+    ctx.body=books;
 
-    //异常处理，异常处理的应用
 });
 module.exports=router
 
