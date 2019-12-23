@@ -97,19 +97,19 @@ class Art {
                 }
             }
         };
-        let arts = null;
+        let arts = [];
         const scope='bh'; //这个是兼容 sequelize 在使用scope 之后 在使用更新操作 会出现sql 语句报错的情况
         // let scope='bh'
         switch (type) {
             case 100:
                 //这里 Sscope 是排除时间语句
-                arts = await Movie.scope(scope).findOne(finder);
+                arts = await Movie.scope(scope).findAll(finder);
                 break;
             case 200:
-                arts = Music.scope(scope).findOne(finder);
+                arts = Music.scope(scope).findAll(finder);
                 break;
             case 300:
-                arts = Sentence.scope(scope).findOne(finder);
+                arts = Sentence.scope(scope).findAll(finder);
                 break;
             case 400:
                 break;

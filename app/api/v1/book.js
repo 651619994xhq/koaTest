@@ -3,7 +3,7 @@ const router = new Router({
     prefix:'/v1/book'
 });
 const {HttpException,ParameterException} = require('../../../core/http-exception');
-const {PositiveIntegerValidator} =require('../../validators/validators');
+const {PositiveIntegerValidator,SearchValidator} =require('../../validators/validators');
 const {Auth} =require('@middlewares/auth');
 const {HotBook} =require('@models/hot-book');
 const {Book} =require('@models/book');
@@ -69,6 +69,17 @@ router.post('/detail',new Auth().m,async ctx=>{
     ctx.body=await book.detail();
 
 });
+
+/**
+ * 图书搜索
+ */
+router.get('/search',new Auth().m,async ctx=>{
+    const v=await new SearchValidator().validate(ctx);
+    const q=v.get('query.q'),start=v.get('query.start'),count=v.get('query.count');
+    const result =await Book.searchFromYuShu(q,start,count);
+    ctx.body = result;
+});
+
 module.exports=router
 
 //user
