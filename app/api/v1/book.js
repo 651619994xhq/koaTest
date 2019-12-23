@@ -80,6 +80,11 @@ router.get('/search',new Auth().m,async ctx=>{
     ctx.body = result;
 });
 
+//爬虫 必备工具 数据处理和分析
+//KOA
+//Python 爬虫工具 requests BF4 Scrapy
+//nodejs 正则表达式
+
 module.exports=router
 
 //user
