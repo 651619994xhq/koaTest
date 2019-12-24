@@ -1,8 +1,10 @@
 const util=require('util');
 const axios=require('axios');
-const {sequelize} = require('../../core/db');
-
 const {Sequelize,Model} = require('sequelize');
+const {sequelize} = require('../../core/db');
+const {Favor} = require('@models/favor');
+
+
 
 class Book extends Model{
     constructor(id){
@@ -16,6 +18,18 @@ class Book extends Model{
          return result.data;
 
     }
+    static async getMyFavorBookCount(uid){
+        //count 是挂在模型上专门求数量的方法
+         const count =await Favor.count({
+             where:{
+                 type:400,
+                 uid
+             }
+         })
+         return count;
+
+    }
+
     //静态方法 搜索书籍
     static async searchFromYuShu(q,start,count,summary=1){
         const url = util.format(global.config.yushu.keywordUrl,encodeURI(q),start,count,summary);

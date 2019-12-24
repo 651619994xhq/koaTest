@@ -7,6 +7,7 @@ const {PositiveIntegerValidator,SearchValidator} =require('../../validators/vali
 const {Auth} =require('@middlewares/auth');
 const {HotBook} =require('@models/hot-book');
 const {Book} =require('@models/book');
+const {Favor} =require('@models/favor');
 //传参方式 1.在路径中传参/v1/${param}/book/latest 2.在path /v1/book/latest?param=...
           //3.在header
           //4.body 只有在post 才能获取到
@@ -78,6 +79,21 @@ router.get('/search',new Auth().m,async ctx=>{
     const q=v.get('query.q'),start=v.get('query.start'),count=v.get('query.count');
     const result =await Book.searchFromYuShu(q,start,count);
     ctx.body = result;
+});
+
+router.get('/favor/count',new Auth().m,async ctx=>{
+    const count =await Book.getMyFavorBookCount(ctx.auth.uid);
+    ctx.body = {
+        count
+    };
+});
+
+router.get('/:book_id/favor',new Auth().m,async ctx=>{
+    const v =await new PositiveIntegerValidator().validate(ctx,{
+        id:'book_id'
+    });
+    const favor=await Favor.getBookFavor(ctx.auth.uid,v.get('path.book_id'))
+    ctx.body = favor
 });
 
 //爬虫 必备工具 数据处理和分析
