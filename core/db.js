@@ -1,5 +1,5 @@
 const {Sequelize,Model} = require('sequelize');
-const {unset,clone} =require('lodash')
+const {unset,clone,isArray} =require('lodash')
 const {
     dbName,
     host,
@@ -44,6 +44,12 @@ Model.prototype.toJSON = function(){
     unset(data,'deletedAt');
     unset(data,'updatedAt');
     unset(data,'createdAt');
+    //exclude  排除  //添加上模型的方法
+    if(isArray(this.exclude)){
+        this.exclude.forEach((value)=>{
+            unset(data,value)
+        });
+    }
     return data;
 }
 module.exports ={

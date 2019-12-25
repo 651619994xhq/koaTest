@@ -53,6 +53,8 @@ class Comment extends Model{
 
 }
 
+Comment.prototype.exclude=['book_id','id'];  //这里在原型上 排除这2个字段  不要在这里排除 这样把代码写死 最好的方式是在api 里 干这个事
+
 Comment.init({
     content:Sequelize.STRING(12),
     nums:{
