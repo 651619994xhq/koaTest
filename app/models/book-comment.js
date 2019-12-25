@@ -40,16 +40,16 @@ class Comment extends Model{
        return comments;
     }
     //这个是在获取的时候 很巧妙
-    toJSON(){
-        //this.dataValues 可以获取所有对象
-        //this
-        return {
-            content: this.getDataValue('content'),
-            nums: this.getDataValue('nums')
-
-        }
-
-    }
+    // toJSON(){
+    //     //this.dataValues 可以获取所有对象
+    //     //this
+    //     return {
+    //         content: this.getDataValue('content'),
+    //         nums: this.getDataValue('nums')
+    //
+    //     }
+    //
+    // }
 
 }
 

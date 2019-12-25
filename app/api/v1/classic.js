@@ -47,7 +47,7 @@ router.post('/:index/next',new Auth().m,async (ctx,next)=>{
         }
     });
     if(!flow){
-        throw global.errs.NotFound();
+        throw new global.errs.NotFound();
     }
 
     const art=await Art.getData(flow.art_id,flow.type);
@@ -74,7 +74,7 @@ router.post('/:index/previous',new Auth().m,async (ctx,next)=>{
         }
     });
     if(!flow){
-        throw global.errs.NotFound();
+        throw new global.errs.NotFound();
     }
 
     const art=await Art.getData(flow.art_id,flow.type);

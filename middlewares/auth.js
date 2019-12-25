@@ -151,3 +151,7 @@ module.exports={
 
 
 //不知道 怎么设计数据库  感觉  辅助
+
+
+
+//使用Scope  和 toJSON 过滤字段

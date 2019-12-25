@@ -1,4 +1,5 @@
-const Sequelize = require('sequelize');
+const {Sequelize,Model} = require('sequelize');
+const {unset,clone} =require('lodash')
 const {
     dbName,
     host,
@@ -34,6 +35,17 @@ const  sequelize = new Sequelize(dbName,user,password,{
 sequelize.sync(); //必须加上 这个代码 才会触发模型的创建
 // sequelize.sync({force:true});  开发环境 可以 加上 但是 如果 生产环境 或者已经 有数据了 会很危险的 这个是强制被删除表 重新 创建数据
 
+
+Model.prototype.toJSON = function(){
+    let data = clone(this.dataValues);
+    unset(data,'created_at');
+    unset(data,'updated_at');
+    unset(data,'deleted_at');
+    unset(data,'deletedAt');
+    unset(data,'updatedAt');
+    unset(data,'createdAt');
+    return data;
+}
 module.exports ={
     sequelize
 }
