@@ -7,10 +7,10 @@ const {Favor} = require('@models/favor');
 
 
 class Book extends Model{
-    constructor(id){
-        super();
-        this.id=id;
-    }
+    // constructor(id){
+    //     super();
+    //     this.id=id;
+    // }
     //定义一个属性 不能传餐
     async detail(){
          const url = util.format(global.config.yushu.detailUrl,this.id);
