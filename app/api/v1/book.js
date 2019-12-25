@@ -3,11 +3,13 @@ const router = new Router({
     prefix:'/v1/book'
 });
 const {HttpException,ParameterException} = require('../../../core/http-exception');
-const {PositiveIntegerValidator,SearchValidator} =require('../../validators/validators');
+const {PositiveIntegerValidator,SearchValidator,AddShortCommentValidator} =require('../../validators/validators');
 const {Auth} =require('@middlewares/auth');
 const {HotBook} =require('@models/hot-book');
 const {Book} =require('@models/book');
 const {Favor} =require('@models/favor');
+const {Comment} = require('@models/book-comment');
+const {success} =require('@lib/helper');
 //传参方式 1.在路径中传参/v1/${param}/book/latest 2.在path /v1/book/latest?param=...
           //3.在header
           //4.body 只有在post 才能获取到
@@ -95,6 +97,29 @@ router.get('/:book_id/favor',new Auth().m,async ctx=>{
     const favor=await Favor.getBookFavor(ctx.auth.uid,v.get('path.book_id'))
     ctx.body = favor
 });
+
+router.post('/add/short_comment',new Auth().m,async ctx=>{
+    const v =await new AddShortCommentValidator().validate(ctx,{
+        id:'book_id'
+    });
+    await Comment.addComment(v.get('body.book_id'),v.get('body.content'));
+    success();
+});
+
+router.get('/:book_id/short_comment',new Auth().m,async ctx=>{
+    const v =await new PositiveIntegerValidator().validate(ctx,{
+        id:'book_id'
+    });
+    // let shortComment=await Comment.findOne({
+    //     where:{
+    //         book_id:v.get('path.book_id')
+    //     }
+    // });
+    let shortComments = await Comment.getComments(v.get('path.book_id'));
+    // console.log('shortComments==>',shortComments);
+    ctx.body=shortComments;
+});
+
 
 //爬虫 必备工具 数据处理和分析
 //KOA

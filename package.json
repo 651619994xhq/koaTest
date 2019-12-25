@@ -35,6 +35,7 @@
     "@root": ".",
     "@models": "app/models",
     "@middlewares": "middlewares",
-    "@validators": "app/validators"
+    "@validators": "app/validators",
+    "@lib": "app/lib"
   }
 }
