@@ -49,3 +49,17 @@ console.log('2==>',test.a);
 console.log('3==>',Test.bcd());
 
 
+
+const obj={
+    name:'xhq',
+    age:18,
+    toJSON: function () {
+        return {
+            name:'test2'
+        }
+    }
+}
+
+console.log(JSON.stringify(obj))
+
+

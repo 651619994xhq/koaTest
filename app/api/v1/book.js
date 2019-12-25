@@ -117,7 +117,26 @@ router.get('/:book_id/short_comment',new Auth().m,async ctx=>{
     // });
     let shortComments = await Comment.getComments(v.get('path.book_id'));
     // console.log('shortComments==>',shortComments);
+
+    //直接把model 赋值给了body 并不是把model 都赋值给了body 是由 model 告诉 body 去进行序列化的
     ctx.body=shortComments;
+});
+
+router.get('/hot_keyword',new Auth().m,async ctx=>{
+    ctx.body={
+        'hot':[
+             'Python',
+             '哈利波特',
+            '王小波'
+        ]
+    }
+    //搜索次数最多
+    //热搜
+    //热搜 频率 趋势
+    //营销工具 微博热搜 广告
+    //一部分 参考算法，人工编辑
+    //Lin-CMS,编辑热门关键字功能
+
 });
 
 
