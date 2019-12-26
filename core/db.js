@@ -78,3 +78,15 @@ module.exports ={
 //1.最简单最常见的是 放在项目中 这样会污染代码
 //2.静态资源服务器 微服务  可以在放一个koa  只有koa-static 这个项目放在宁一台机器上
 //3.云服务 oss 贵 ECS RDS ,OSS ，CDN
+//4.github gitpage 300mb 一般个人开发者可以使用
+
+
+//js css html
+//vue/react 前端单页面(可以看到静态资源)可以放在cdn上
+//不包括nuxt ssr
+//服务端渲染 php java
+//vue react 网站，SEO TO C 网站 绝大数网站 还是用的老牌服务端渲染，因为vue react 不支持sso
+//cms 内部SEO
+//webapp h5
+
+
