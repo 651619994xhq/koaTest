@@ -93,4 +93,25 @@ module.exports ={
 
 //access_token refresh_token  无感知刷新 双令牌无感知登录 前端
 
+//服务部署
+//本地跑起来
+//另外一台电脑 跑起来
+//本地电脑外网 ip
+
+//云服务器 Linux 电脑
+//localhost ip
+//注册域名
+//备案
+//解析 7yue.pro ip
+
+//mysql node xampp linux (软件安装)
+
+//nginx 转发 到不同端口号
+//node 3000 python 5000 java 8080
+
+//http https
+//https 通常收费  lets encrypt 免费 3个月续期
+
+//小程序 云开发
+
 
