@@ -1,4 +1,5 @@
 require('module-alias/register'); //引入别名的包
+const path=require('path')
 
 const Koa = require('koa');
 const parser = require('koa-bodyparser');//中间件 主要是获取客户端请求的body 参数
@@ -6,12 +7,14 @@ const parser = require('koa-bodyparser');//中间件 主要是获取客户端请
 // const Router = require('koa-router')
 const InitManager = require('./core/init');
 const catchError=require('./middlewares/exception'); //处理异常的中间件
+const static = require('koa-static'); //这里是处理静态文件的一个插件 也是一个中间件
 
 //应用程序对象 中间件
 const app = new Koa();
 //中间件 从上到下一次执行
 app.use(parser()); //注册中间件
 app.use(catchError); //全局处理异常
+app.use(static(path.join(__dirname,'./static'))); //处理静态资源的中间件
 InitManager.initCore(app);
 app.listen(3000);
 
