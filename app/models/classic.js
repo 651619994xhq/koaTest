@@ -12,7 +12,13 @@ const {Sequelize, Model} = require('sequelize');
 //
 // }  这种写法 不支持
 const classicFields = {
-    image: Sequelize.STRING,
+    image: {
+        type:Sequelize.STRING,
+        //在获取的时候
+        // get(){
+        //     return `${global.config.host}${this.getDataValue('image')}`
+        // }
+    },
     content: Sequelize.STRING,
     pubdate: Sequelize.DATEONLY,
     fav_nums: {

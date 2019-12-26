@@ -44,6 +44,16 @@ Model.prototype.toJSON = function(){
     unset(data,'deletedAt');
     unset(data,'updatedAt');
     unset(data,'createdAt');
+
+    //这个比较特殊化 暂时只能用这个了
+    for(key in data){
+        if(key === 'image'){
+            if(!data[key].startsWith('http')){
+                data[key]=global.config.host + data[key];
+            }
+
+        }
+    }
     //exclude  排除  //添加上模型的方法
     if(isArray(this.exclude)){
         this.exclude.forEach((value)=>{
@@ -60,3 +70,11 @@ module.exports ={
 
 
 //数据库 scope 是个很好的东西 可以排除很多数据
+
+//钩子最大的好处，就是解耦程序
+
+
+//静态资源应该放在什么位置   图片 消耗流量
+//1.最简单最常见的是 放在项目中 这样会污染代码
+//2.静态资源服务器 微服务  可以在放一个koa  只有koa-static 这个项目放在宁一台机器上
+//3.云服务 oss 贵 ECS RDS ,OSS ，CDN

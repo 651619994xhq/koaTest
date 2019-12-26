@@ -59,10 +59,10 @@ class Art {
                 break
 
         }
-        if(art && art.image){
-            let imgUrl = art.dataValues.image;
-            art.dataValues.image = `${global.config.host}${imgUrl}`
-        }
+        // if(art && art.image){
+        //     let imgUrl = art.dataValues.image;
+        //     art.dataValues.image = `${global.config.host}${imgUrl}`
+        // }
 
         return art
 
