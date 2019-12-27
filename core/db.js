@@ -108,10 +108,14 @@ module.exports ={
 
 //nginx 转发 到不同端口号
 //node 3000 python 5000 java 8080
+//监控进程/守护进程
+//pm2 （最好的node服务启动进程的工具） 日志监控 重启  npm -g
 
 //http https
 //https 通常收费  lets encrypt 免费 3个月续期
 
 //小程序 云开发
+//结合Serverless
+
 
 
