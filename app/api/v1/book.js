@@ -122,7 +122,7 @@ router.get('/:book_id/short_comment',new Auth().m,async ctx=>{
     ctx.body=shortComments;
 });
 
-router.get('/hot_keyword',new Auth().m,async ctx=>{
+router.post('/hot_keyword',async ctx=>{
     ctx.body={
         'hot':[
              'Python',
